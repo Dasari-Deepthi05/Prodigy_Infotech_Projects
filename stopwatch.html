@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .stopwatch {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        button {
+            margin: 5px;
+            padding: 10px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        .laps {
+            margin-top: 20px;
+            list-style: none;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="stopwatch">00:00:00</div>
+    <button onclick="startStopwatch()">Start</button>
+    <button onclick="pauseStopwatch()">Pause</button>
+    <button onclick="resetStopwatch()">Reset</button>
+    <button onclick="recordLap()">Lap</button>
+    <ul class="laps"></ul>
+
+    <script>
+        let timer;
+        let startTime;
+        let elapsedTime = 0;
+        let running = false;
+
+        function startStopwatch() {
+            if (!running) {
+                startTime = Date.now() - elapsedTime;
+                timer = setInterval(updateTime, 1000);
+                running = true;
+            }
+        }
+
+        function pauseStopwatch() {
+            if (running) {
+                clearInterval(timer);
+                elapsedTime = Date.now() - startTime;
+                running = false;
+            }
+        }
+
+        function resetStopwatch() {
+            clearInterval(timer);
+            document.querySelector(".stopwatch").innerText = "00:00:00";
+            elapsedTime = 0;
+            running = false;
+            document.querySelector(".laps").innerHTML = "";
+        }
+
+        function recordLap() {
+            if (running) {
+                let lapTime = document.querySelector(".stopwatch").innerText;
+                let lapItem = document.createElement("li");
+                lapItem.innerText = lapTime;
+                document.querySelector(".laps").appendChild(lapItem);
+            }
+        }
+
+        function updateTime() {
+            elapsedTime = Date.now() - startTime;
+            let totalSeconds = Math.floor(elapsedTime / 1000);
+            let hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+            let minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+            let seconds = String(totalSeconds % 60).padStart(2, '0');
+            document.querySelector(".stopwatch").innerText = `${hours}:${minutes}:${seconds}`;
+        }
+    </script>
+</body>
+</html>
