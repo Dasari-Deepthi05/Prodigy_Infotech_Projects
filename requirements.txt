@@ -1,0 +1,6 @@
+# No Python dependencies for these frontend projects
+
+# Example - add only if you use Python packages for backend or tooling
+flask
+django
+requests
